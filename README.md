@@ -2,7 +2,7 @@
 
 Simple plugin to change default Obsidian "Enter" behaviour:
 
-In default Obsidian/Markdown syntax single "Enter" creates only a soft line break. To create new paragraph you need to double click "Enter".
+In default Obsidian/Markdown syntax single "Enter" creates only a soft line break. To create new paragraph you need to double press "Enter".
 
 With this plugin single "Enter" creates a new paragraph just like in normal text editor.
 
@@ -14,4 +14,4 @@ With this plugin single "Enter" creates a new paragraph just like in normal text
 
 ## Notes
 
-New paragraph is only created in normal text. When you are creating a list or code block, there is default behavior.
+New paragraph is only created in normal text editing. When you are creating a list or code block, there is default behavior (soft line break).
