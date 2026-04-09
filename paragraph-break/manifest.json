@@ -1,0 +1,10 @@
+{
+  "id": "paragraph-break",
+  "name": "Paragraph Break",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Sprawia, że pojedynczy Enter tworzy nowy akapit (pusty wiersz) zamiast zwykłego złamania linii. Shift+Enter wstawia zwykłe złamanie linii.",
+  "author": "Mateusz Nitka",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
