@@ -3,8 +3,8 @@
   "name": "Paragraph Break",
   "version": "1.0.0",
   "minAppVersion": "0.15.0",
-  "description": "Sprawia, że pojedynczy Enter tworzy nowy akapit (pusty wiersz) zamiast zwykłego złamania linii. Shift+Enter wstawia zwykłe złamanie linii.",
-  "author": "Twoje Imię",
-  "authorUrl": "",
+  "description": "Plugin to create new paragraph after hitting Enter once instead of twice.",
+  "author": "Mateusz Nitka",
+  "authorUrl": "https://mtnt.pl/blog/en/",
   "isDesktopOnly": false
 }
