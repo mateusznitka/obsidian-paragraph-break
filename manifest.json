@@ -1,7 +1,7 @@
 {
   "id": "paragraph-break",
   "name": "Paragraph Break",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minAppVersion": "0.15.0",
   "description": "Plugin to create new paragraph after hitting Enter once instead of twice.",
   "author": "Mateusz Nitka",
