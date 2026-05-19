@@ -62,7 +62,7 @@ var ParagraphBreakPlugin = class extends import_obsidian.Plugin {
       const afterBullet = line.slice(listMatch[0].length);
       if (afterBullet.trim() === "") {
         editor.setLine(cursor.line, "");
-        editor.replaceRange("\n", { line: cursor.line, ch: 0 }, { line: cursor.line, ch: 0 });
+        editor.replaceRange("\n", { line: cursor.line, ch: 0 });
         editor.setCursor({ line: cursor.line + 1, ch: 0 });
       } else {
         const prefix = listMatch[0];
@@ -92,12 +92,9 @@ ${newPrefix}`, insertPos);
     }
     const nextLine = cursor.line < totalLines - 1 ? editor.getLine(cursor.line + 1) : null;
     const atLineEnd = cursor.ch >= line.length;
-    if (atLineEnd && nextLine === "") {
-      editor.setCursor({ line: cursor.line + 2, ch: 0 });
-    } else {
-      editor.replaceRange("\n\n", { line: cursor.line, ch: cursor.ch });
-      editor.setCursor({ line: cursor.line + 2, ch: 0 });
-    }
+    const softBreakOnly = atLineEnd && nextLine !== null && nextLine !== "";
+    editor.replaceRange(softBreakOnly ? "\n" : "\n\n", { line: cursor.line, ch: cursor.ch });
+    editor.setCursor({ line: cursor.line + 2, ch: 0 });
   }
   onunload() {
   }

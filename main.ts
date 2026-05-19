@@ -45,7 +45,7 @@ export default class ParagraphBreakPlugin extends Plugin {
 			const afterBullet = line.slice(listMatch[0].length);
 			if (afterBullet.trim() === "") {
 				editor.setLine(cursor.line, "");
-				editor.replaceRange("\n", { line: cursor.line, ch: 0 }, { line: cursor.line, ch: 0 });
+				editor.replaceRange("\n", { line: cursor.line, ch: 0 });
 				editor.setCursor({ line: cursor.line + 1, ch: 0 });
 			} else {
 				// Continue list with same prefix
@@ -77,17 +77,15 @@ export default class ParagraphBreakPlugin extends Plugin {
 			return;
 		}
 
-		// Default: insert paragraph break (empty line)
+		// Default: always create a new paragraph
 		const nextLine = cursor.line < totalLines - 1 ? editor.getLine(cursor.line + 1) : null;
 		const atLineEnd = cursor.ch >= line.length;
 
-		if (atLineEnd && nextLine === "") {
-			// Already followed by empty line — just move cursor past it
-			editor.setCursor({ line: cursor.line + 2, ch: 0 });
-		} else {
-			editor.replaceRange("\n\n", { line: cursor.line, ch: cursor.ch });
-			editor.setCursor({ line: cursor.line + 2, ch: 0 });
-		}
+		// Insert \n only when there's already a line separator to next non-empty content (soft break case).
+		// In every other case insert full \n\n.
+		const softBreakOnly = atLineEnd && nextLine !== null && nextLine !== "";
+		editor.replaceRange(softBreakOnly ? "\n" : "\n\n", { line: cursor.line, ch: cursor.ch });
+		editor.setCursor({ line: cursor.line + 2, ch: 0 });
 	}
 
 	onunload() {}
