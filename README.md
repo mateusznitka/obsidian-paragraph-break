@@ -8,8 +8,14 @@ With this plugin single "Enter" creates a new paragraph just like in normal text
 
 ## Installation
 
+#### Obsidian Community
+
+Turn on Community plugins -> Search for "Paragraph Break" -> Turn on.
+
+#### Manual Installation
+
 1. Turn on community plugins
-2. Copy paragraph-break folder to your vault/.obsidian/plugins folder.
+2. Create paragraph-break folder in your vault/.obsidian/plugins folder and copy main.js and manifest.json from release.
 3. Turn on plugin in settings
 
 ## Notes
