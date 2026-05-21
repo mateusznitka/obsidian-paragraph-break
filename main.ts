@@ -26,6 +26,11 @@ export default class ParagraphBreakPlugin extends Plugin {
 				return;
 			}
 
+			// Don't intercept Enter when editing the inline title
+			if (document.activeElement?.closest(".inline-title")) {
+				return;
+			}
+
 			evt.preventDefault();
 			evt.stopPropagation();
 
