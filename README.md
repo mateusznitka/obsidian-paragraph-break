@@ -12,6 +12,8 @@ With this plugin single "Enter" creates a new paragraph just like in normal text
 
 Turn on Community plugins -> Search for "Paragraph Break" -> Turn on.
 
+Link to plugin in Obsidian Community: [community.obsidian.md/plugins/paragraph-break](https://community.obsidian.md/plugins/paragraph-break)
+
 #### Manual Installation
 
 1. Turn on community plugins
