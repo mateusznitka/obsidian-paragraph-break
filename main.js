@@ -29,13 +29,6 @@ module.exports = __toCommonJS(main_exports);
 var import_obsidian = require("obsidian");
 var ParagraphBreakPlugin = class extends import_obsidian.Plugin {
   async onload() {
-    this.addCommand({
-      id: "insert-paragraph-break",
-      name: "Wstaw nowy akapit (Enter = nowy paragraf)",
-      editorCallback: (editor) => {
-        this.insertParagraphBreak(editor);
-      }
-    });
     this.registerDomEvent(document, "keydown", (evt) => {
       var _a;
       if (evt.key !== "Enter" || evt.shiftKey || evt.ctrlKey || evt.metaKey || evt.altKey) {
@@ -70,11 +63,11 @@ var ParagraphBreakPlugin = class extends import_obsidian.Plugin {
         editor.setCursor({ line: cursor.line + 1, ch: 0 });
       } else {
         const prefix = listMatch[0];
-        const numberedMatch = line.match(/^(\s*)(\d+)(\.)\s/);
+        const numberedMatch = line.match(/^(\s*)(\d+)\.\s/);
         let newPrefix = prefix;
         if (numberedMatch) {
           const num = parseInt(numberedMatch[2]) + 1;
-          newPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
+          newPrefix = `${numberedMatch[1]}${num}. `;
         }
         const insertPos = { line: cursor.line, ch: cursor.ch };
         editor.replaceRange(`
@@ -99,7 +92,5 @@ ${newPrefix}`, insertPos);
     const softBreakOnly = atLineEnd && nextLine !== null && nextLine !== "";
     editor.replaceRange(softBreakOnly ? "\n" : "\n\n", { line: cursor.line, ch: cursor.ch });
     editor.setCursor({ line: cursor.line + 2, ch: 0 });
-  }
-  onunload() {
   }
 };

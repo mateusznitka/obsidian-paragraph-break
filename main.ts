@@ -2,14 +2,6 @@ import { Plugin, Editor, MarkdownView } from "obsidian";
 
 export default class ParagraphBreakPlugin extends Plugin {
 	async onload() {
-		this.addCommand({
-			id: "insert-paragraph-break",
-			name: "Wstaw nowy akapit (Enter = nowy paragraf)",
-			editorCallback: (editor: Editor) => {
-				this.insertParagraphBreak(editor);
-			},
-		});
-
 		this.registerDomEvent(document, "keydown", (evt: KeyboardEvent) => {
 			if (evt.key !== "Enter" || evt.shiftKey || evt.ctrlKey || evt.metaKey || evt.altKey) {
 				return;
@@ -56,11 +48,11 @@ export default class ParagraphBreakPlugin extends Plugin {
 				// Continue list with same prefix
 				const prefix = listMatch[0];
 				// For numbered lists, increment number
-				const numberedMatch = line.match(/^(\s*)(\d+)(\.)\s/);
+				const numberedMatch = line.match(/^(\s*)(\d+)\.\s/);
 				let newPrefix = prefix;
 				if (numberedMatch) {
 					const num = parseInt(numberedMatch[2]) + 1;
-					newPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
+					newPrefix = `${numberedMatch[1]}${num}. `;
 				}
 				const insertPos = { line: cursor.line, ch: cursor.ch };
 				editor.replaceRange(`\n${newPrefix}`, insertPos);
@@ -86,12 +78,11 @@ export default class ParagraphBreakPlugin extends Plugin {
 		const nextLine = cursor.line < totalLines - 1 ? editor.getLine(cursor.line + 1) : null;
 		const atLineEnd = cursor.ch >= line.length;
 
-		// Insert \n only when there's already a line separator to next non-empty content (soft break case).
-		// In every other case insert full \n\n.
+		// Next line has content → file already has \n (line ending), so one more \n gives \n\n = paragraph break.
+		// Next line is empty or missing → insert \n\n directly.
 		const softBreakOnly = atLineEnd && nextLine !== null && nextLine !== "";
 		editor.replaceRange(softBreakOnly ? "\n" : "\n\n", { line: cursor.line, ch: cursor.ch });
 		editor.setCursor({ line: cursor.line + 2, ch: 0 });
 	}
 
-	onunload() {}
 }
