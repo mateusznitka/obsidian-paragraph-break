@@ -23,3 +23,9 @@ Link to plugin in Obsidian Community: [community.obsidian.md/plugins/paragraph-b
 ## Notes
 
 New paragraph is only created in normal text editing. When you are creating a list or code block, there is default behavior (soft line break).
+
+## Support
+
+If you find this plugin useful, consider buying me a coffee:
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/mateusznitka)
