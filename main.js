@@ -54,7 +54,7 @@ var ParagraphBreakPlugin = class extends import_obsidian.Plugin {
     const cursor = editor.getCursor();
     const line = editor.getLine(cursor.line);
     const totalLines = editor.lineCount();
-    const listMatch = line.match(/^(\s*)([-*+]|\d+\.)\s/);
+    const listMatch = line.match(/^(\s*)([-*+]|\d+[.)])\s/);
     if (listMatch) {
       const afterBullet = line.slice(listMatch[0].length);
       if (afterBullet.trim() === "") {
@@ -63,11 +63,11 @@ var ParagraphBreakPlugin = class extends import_obsidian.Plugin {
         editor.setCursor({ line: cursor.line + 1, ch: 0 });
       } else {
         const prefix = listMatch[0];
-        const numberedMatch = line.match(/^(\s*)(\d+)\.\s/);
+        const numberedMatch = line.match(/^(\s*)(\d+)([.)])\s/);
         let newPrefix = prefix;
         if (numberedMatch) {
           const num = parseInt(numberedMatch[2]) + 1;
-          newPrefix = `${numberedMatch[1]}${num}. `;
+          newPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
         }
         const insertPos = { line: cursor.line, ch: cursor.ch };
         editor.replaceRange(`

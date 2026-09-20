@@ -35,8 +35,8 @@ export default class ParagraphBreakPlugin extends Plugin {
 		const line = editor.getLine(cursor.line);
 		const totalLines = editor.lineCount();
 
-		// Check if we're in a list item
-		const listMatch = line.match(/^(\s*)([-*+]|\d+\.)\s/);
+		// Check if we're in a list item (bullet, "1.", or "1)")
+		const listMatch = line.match(/^(\s*)([-*+]|\d+[.)])\s/);
 		if (listMatch) {
 			// If line is empty list item — break out of list
 			const afterBullet = line.slice(listMatch[0].length);
@@ -47,12 +47,12 @@ export default class ParagraphBreakPlugin extends Plugin {
 			} else {
 				// Continue list with same prefix
 				const prefix = listMatch[0];
-				// For numbered lists, increment number
-				const numberedMatch = line.match(/^(\s*)(\d+)\.\s/);
+				// For numbered lists, increment number (keep "." or ")" delimiter)
+				const numberedMatch = line.match(/^(\s*)(\d+)([.)])\s/);
 				let newPrefix = prefix;
 				if (numberedMatch) {
 					const num = parseInt(numberedMatch[2]) + 1;
-					newPrefix = `${numberedMatch[1]}${num}. `;
+					newPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
 				}
 				const insertPos = { line: cursor.line, ch: cursor.ch };
 				editor.replaceRange(`\n${newPrefix}`, insertPos);
