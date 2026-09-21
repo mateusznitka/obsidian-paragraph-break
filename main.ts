@@ -97,6 +97,13 @@ export default class ParagraphBreakPlugin extends Plugin {
 		}
 
 		// Default: always create a new paragraph
+		if (line.trim() === "") {
+			// Cursor is already on a blank paragraph-gap line — just add one more blank line to write into
+			editor.replaceRange("\n", { line: cursor.line, ch: cursor.ch });
+			editor.setCursor({ line: cursor.line + 1, ch: 0 });
+			return;
+		}
+
 		const nextLine = cursor.line < totalLines - 1 ? editor.getLine(cursor.line + 1) : null;
 		const atLineEnd = cursor.ch >= line.length;
 
