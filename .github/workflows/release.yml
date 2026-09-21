@@ -38,7 +38,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           tag="${GITHUB_REF#refs/tags/}"
-          notes="$(git tag -l --format='%(contents)' "$tag")"
+          # actions/checkout can leave a lightweight local tag ref that shadows the
+          # real annotated tag object, so re-fetch it explicitly before reading it.
+          git fetch origin "refs/tags/$tag:refs/tags/$tag" --force
+          notes="$(git for-each-ref --format='%(contents)' "refs/tags/$tag")"
           if [ -n "$notes" ]; then
             gh release create "$tag" --title "$tag" --notes "$notes" main.js manifest.json
           else
