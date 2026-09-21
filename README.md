@@ -26,6 +26,6 @@ New paragraph is only created in normal text editing. When you are creating a li
 
 ## Support
 
-If you find this plugin useful, consider buying me a coffee:
+If you find this plugin useful, consider leaving a GitHub star or buying me a coffee:
 
 <a href="https://buymeacoffee.com/mateusznitka"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="150"></a>
