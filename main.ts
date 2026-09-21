@@ -35,25 +35,29 @@ export default class ParagraphBreakPlugin extends Plugin {
 		const line = editor.getLine(cursor.line);
 		const totalLines = editor.lineCount();
 
-		// Check if we're in a list item (bullet, "1.", or "1)")
+		// Check if we're in a list item (bullet, "1.", or "1)"), optionally a task ("- [ ]")
 		const listMatch = line.match(/^(\s*)([-*+]|\d+[.)])\s/);
 		if (listMatch) {
-			// If line is empty list item — break out of list
-			const afterBullet = line.slice(listMatch[0].length);
-			if (afterBullet.trim() === "") {
+			const rest = line.slice(listMatch[0].length);
+			const checkboxMatch = rest.match(/^\[.\]\s/);
+			const afterMarker = checkboxMatch ? rest.slice(checkboxMatch[0].length) : rest;
+
+			// If line is an empty list/task item — break out of list
+			if (afterMarker.trim() === "") {
 				editor.setLine(cursor.line, "");
 				editor.replaceRange("\n", { line: cursor.line, ch: 0 });
 				editor.setCursor({ line: cursor.line + 1, ch: 0 });
 			} else {
 				// Continue list with same prefix
-				const prefix = listMatch[0];
+				let bulletPrefix = listMatch[0];
 				// For numbered lists, increment number (keep "." or ")" delimiter)
 				const numberedMatch = line.match(/^(\s*)(\d+)([.)])\s/);
-				let newPrefix = prefix;
 				if (numberedMatch) {
 					const num = parseInt(numberedMatch[2]) + 1;
-					newPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
+					bulletPrefix = `${numberedMatch[1]}${num}${numberedMatch[3]} `;
 				}
+				// For tasks, always continue with a fresh unchecked checkbox
+				const newPrefix = checkboxMatch ? `${bulletPrefix}[ ] ` : bulletPrefix;
 				const insertPos = { line: cursor.line, ch: cursor.ch };
 				editor.replaceRange(`\n${newPrefix}`, insertPos);
 				editor.setCursor({ line: cursor.line + 1, ch: newPrefix.length });
