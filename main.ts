@@ -33,7 +33,6 @@ export default class ParagraphBreakPlugin extends Plugin {
 	insertParagraphBreak(editor: Editor) {
 		const cursor = editor.getCursor();
 		const line = editor.getLine(cursor.line);
-		const totalLines = editor.lineCount();
 
 		// Check if we're in a list item (bullet, "1.", or "1)"), optionally a task ("- [ ]")
 		const listMatch = line.match(/^(\s*)([-*+]|\d+[.)])\s/);
@@ -96,21 +95,8 @@ export default class ParagraphBreakPlugin extends Plugin {
 			return;
 		}
 
-		// Default: always create a new paragraph
-		if (line.trim() === "") {
-			// Cursor is already on a blank paragraph-gap line — just add one more blank line to write into
-			editor.replaceRange("\n", { line: cursor.line, ch: cursor.ch });
-			editor.setCursor({ line: cursor.line + 1, ch: 0 });
-			return;
-		}
-
-		const nextLine = cursor.line < totalLines - 1 ? editor.getLine(cursor.line + 1) : null;
-		const atLineEnd = cursor.ch >= line.length;
-
-		// Next line has content → file already has \n (line ending), so one more \n gives \n\n = paragraph break.
-		// Next line is empty or missing → insert \n\n directly.
-		const softBreakOnly = atLineEnd && nextLine !== null && nextLine !== "";
-		editor.replaceRange(softBreakOnly ? "\n" : "\n\n", { line: cursor.line, ch: cursor.ch });
+		// Default: always create a new paragraph — never a soft break
+		editor.replaceRange("\n\n", { line: cursor.line, ch: cursor.ch });
 		editor.setCursor({ line: cursor.line + 2, ch: 0 });
 	}
 
