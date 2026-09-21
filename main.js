@@ -78,6 +78,22 @@ ${newPrefix}`, insertPos);
       }
       return;
     }
+    const quoteMatch = line.match(/^(\s*)((?:>\s?)+)/);
+    if (quoteMatch) {
+      const afterQuote = line.slice(quoteMatch[0].length);
+      if (afterQuote.trim() === "") {
+        editor.setLine(cursor.line, "");
+        editor.replaceRange("\n", { line: cursor.line, ch: 0 });
+        editor.setCursor({ line: cursor.line + 1, ch: 0 });
+      } else {
+        const prefix = quoteMatch[0];
+        const insertPos = { line: cursor.line, ch: cursor.ch };
+        editor.replaceRange(`
+${prefix}`, insertPos);
+        editor.setCursor({ line: cursor.line + 1, ch: prefix.length });
+      }
+      return;
+    }
     let inCodeBlock = false;
     for (let i = 0; i <= cursor.line; i++) {
       if (editor.getLine(i).startsWith("```")) {

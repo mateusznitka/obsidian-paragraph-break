@@ -65,6 +65,24 @@ export default class ParagraphBreakPlugin extends Plugin {
 			return;
 		}
 
+		// Check if we're in a blockquote (">", ">>", "> > ", ...)
+		const quoteMatch = line.match(/^(\s*)((?:>\s?)+)/);
+		if (quoteMatch) {
+			const afterQuote = line.slice(quoteMatch[0].length);
+			if (afterQuote.trim() === "") {
+				// Empty blockquote line — break out of quote
+				editor.setLine(cursor.line, "");
+				editor.replaceRange("\n", { line: cursor.line, ch: 0 });
+				editor.setCursor({ line: cursor.line + 1, ch: 0 });
+			} else {
+				const prefix = quoteMatch[0];
+				const insertPos = { line: cursor.line, ch: cursor.ch };
+				editor.replaceRange(`\n${prefix}`, insertPos);
+				editor.setCursor({ line: cursor.line + 1, ch: prefix.length });
+			}
+			return;
+		}
+
 		// Check if we're in a code block
 		let inCodeBlock = false;
 		for (let i = 0; i <= cursor.line; i++) {
